@@ -80,6 +80,7 @@ def format_date_range(
     locale: Locale,
     single_date_template: str,
     date_range_template: str,
+    compact_date_ranges_removing_start_year: bool,
 ) -> str:
     """Format date range with localized start and end dates.
 
@@ -110,16 +111,7 @@ def format_date_range(
     Returns:
         Formatted date range string.
     """
-    if isinstance(start_date, int):
-        # Then it means only the year is provided
-        start_date = str(start_date)
-    else:
-        # Then it means start_date is either in YYYY-MM-DD or YYYY-MM format
-        date_object = get_date_object(start_date)
-        start_date = date_object_to_string(
-            date_object, locale=locale, single_date_template=single_date_template
-        )
-
+    end_date_has_month = False
     if end_date == "present":
         end_date = locale.present
     elif isinstance(end_date, int):
@@ -131,6 +123,24 @@ def format_date_range(
         end_date = date_object_to_string(
             date_object, locale=locale, single_date_template=single_date_template
         )
+        end_date_has_month = True
+
+    if isinstance(start_date, int):
+        # Then it means only the year is provided
+        start_date = str(start_date)
+    else:
+        # Then it means start_date is either in YYYY-MM-DD or YYYY-MM format
+        date_object = get_date_object(start_date)
+        if compact_date_ranges_removing_start_year and end_date_has_month:
+            start_date = date_object_to_string(
+                date_object,
+                locale=locale,
+                single_date_template=single_date_template.replace("YEAR", ""),
+            )
+        else:
+            start_date = date_object_to_string(
+                date_object, locale=locale, single_date_template=single_date_template
+            )
 
     placeholders: dict[str, str] = {
         "START_DATE": start_date,

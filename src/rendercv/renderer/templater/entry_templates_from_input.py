@@ -98,6 +98,7 @@ def render_entry_templates[EntryType: Entry](
     templates: Templates,
     locale: Locale,
     show_time_span: bool,
+    compact_date_ranges_removing_start_year: bool,
     current_date: Date,
 ) -> EntryType:
     """Expand entry templates by substituting field placeholders with processed values.
@@ -169,6 +170,7 @@ def render_entry_templates[EntryType: Entry](
             end_date=getattr(entry, "end_date", None),
             locale=locale,
             show_time_span=show_time_span,
+            compact_date_ranges_removing_start_year=compact_date_ranges_removing_start_year,
             current_date=current_date,
             single_date_template=templates.single_date,
             date_range_template=templates.date_range,
@@ -274,6 +276,7 @@ def process_date(
     locale: Locale,
     current_date: Date,
     show_time_span: bool,
+    compact_date_ranges_removing_start_year: bool,
     single_date_template: str,
     date_range_template: str,
     time_span_template: str,
@@ -341,6 +344,7 @@ def process_date(
             locale=locale,
             single_date_template=single_date_template,
             date_range_template=date_range_template,
+            compact_date_ranges_removing_start_year=compact_date_ranges_removing_start_year,
         )
         if show_time_span:
             time_span = compute_time_span_string(
