@@ -438,6 +438,25 @@ def test_format_single_date(date, template, locale_kwargs, expected):
             {},
             "2020 – present",
         ),
+        # Compact date ranges
+        (
+            "2020-01",
+            "2020-05",
+            "MONTH_ABBREVIATION YEAR",
+            "START_DATE – END_DATE",
+            True,
+            {},
+            "Jan – May 2020",
+        ),
+        (
+            "2020-01",
+            "present",
+            "MONTH_ABBREVIATION YEAR",
+            "START_DATE – END_DATE",
+            True,
+            {},
+            "Jan 2020 – present",
+        ),
         # Custom locale present translation
         (
             "2020-01-01",

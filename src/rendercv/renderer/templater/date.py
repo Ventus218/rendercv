@@ -97,6 +97,7 @@ def format_date_range(
             locale=english_locale,
             single_date_template="MONTH_ABBREVIATION YEAR",
             date_range_template="START_DATE to END_DATE",
+            compact_date_ranges_removing_start_year=False,
         )
         # Returns: "Jun 2020 to present"
         ```
@@ -107,10 +108,13 @@ def format_date_range(
         locale: Locale providing month names and present translation.
         single_date_template: Template for formatting individual dates.
         date_range_template: Template combining start and end dates.
+        compact_date_ranges_removing_start_year: Flag for compacting date ranges
+            that fall within the same year by removing the start_date year.
 
     Returns:
         Formatted date range string.
     """
+    # Compacting the date range only makes sense if the end_date specifies a month
     end_date_has_month = False
     if end_date == "present":
         end_date = locale.present
